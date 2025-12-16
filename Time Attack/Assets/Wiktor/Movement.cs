@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -31,7 +32,7 @@ public class Movement : MonoBehaviour
         inputSystemActions.Player.Look.canceled += _ => camDir = Vector2.zero;
 
         inputSystemActions.Player.Sprint.performed += _ => speed = sprintSpeed;
-        inputSystemActions.Player.Sprint.canceled += _ => speed = 2;
+        inputSystemActions.Player.Sprint.canceled += _ => speed = 2f;
 
         inputSystemActions.Player.Jump.started += _ =>
         {
@@ -57,9 +58,9 @@ public class Movement : MonoBehaviour
         transform.Rotate(0, rotX, 0);
 
         Vector3 camRot = cam.transform.eulerAngles;
-        camRot.x -= 90;
-        if (camRot.x <= 60 && camRot.x >= -60) cam.transform.Rotate(-rotY, 0, 0);
-        else cam.transform.Rotate(rotY,0,0);
+        if (camRot.y > 270) camRot.y -= 360;
+        camRot.x = Mathf.Clamp(camRot.x, -70, 70);
+        cam.transform.Rotate(-rotY, 0, 0);
     }
     void FixedUpdate()
     {

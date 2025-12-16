@@ -2,21 +2,72 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour
 {
+    CharacterController charControl;
+
     InputSystemActions inputSystemActions;
-    Vector2 movement;
-    bool jump;
+    float grav = -9.81f;
+    Vector2 movement, camDir;
+    Vector3 playerVelocity;
+    GameObject cam;
+    bool isGrounded;
+
+    [Header("Player Settings")]
+    public float speed = 2f, jumpHeight = 1.5f, camSens;
     void Awake()
     {
+        cam = GameObject.Find("Main Camera");
+
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+
+        charControl = gameObject.AddComponent<CharacterController>();
+
         inputSystemActions = new InputSystemActions();
+
         inputSystemActions.Player.Move.performed += ctx => movement = ctx.ReadValue<Vector2>();
         inputSystemActions.Player.Move.canceled += _ => movement = Vector2.zero;
 
-        inputSystemActions.Player.Jump.performed += _ => jump = true;
-    }
+        inputSystemActions.Player.Look.performed += ctx => camDir = ctx.ReadValue<Vector2>();
+        inputSystemActions.Player.Look.canceled += _ => camDir = Vector2.zero;
 
-    // Update is called once per frame
+        inputSystemActions.Player.Jump.started += _ =>
+        {
+            if (isGrounded)
+            {
+                playerVelocity.y = Mathf.Sqrt(jumpHeight * -2.0f * grav);
+            }
+        };
+    }
+    private void OnEnable()
+    {
+        inputSystemActions.Enable();
+    }
+    private void OnDisable()
+    {
+        inputSystemActions.Disable();
+    }
     void Update()
     {
-        
+        float rotY = camDir.y * camSens;
+        float rotX = camDir.x * camSens;
+
+        transform.Rotate(0, rotX, 0);
+        cam.transform.Rotate(-rotY, 0, 0);
+    }
+    void FixedUpdate()
+    {
+        isGrounded = charControl.isGrounded;
+        if (isGrounded)
+        {
+            playerVelocity.y = grav;
+        }
+        else
+        {
+            playerVelocity.y += grav * Time.fixedDeltaTime;
+        }
+
+        Vector3 move = transform.right * movement.x + transform.forward * movement.y;
+        Vector3 lastMove = (move * speed) + (playerVelocity.y * Vector3.up);
+        charControl.Move(lastMove * Time.fixedDeltaTime);
     }
 }

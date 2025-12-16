@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class Movement : MonoBehaviour
@@ -5,11 +6,11 @@ public class Movement : MonoBehaviour
     CharacterController charControl;
 
     InputSystemActions inputSystemActions;
-    float grav = -9.81f;
+    float grav = -9.81f, sprintSpeed;
     Vector2 movement, camDir;
     Vector3 playerVelocity;
     GameObject cam;
-    bool isGrounded;
+    bool isGrounded, isSprinting;
 
     [Header("Player Settings")]
     public float speed = 2f, jumpHeight = 1.5f, camSens;
@@ -29,6 +30,9 @@ public class Movement : MonoBehaviour
 
         inputSystemActions.Player.Look.performed += ctx => camDir = ctx.ReadValue<Vector2>();
         inputSystemActions.Player.Look.canceled += _ => camDir = Vector2.zero;
+
+        inputSystemActions.Player.Sprint.performed += _ => speed = sprintSpeed;
+        inputSystemActions.Player.Sprint.canceled += _ => speed = 2f;
 
         inputSystemActions.Player.Jump.started += _ =>
         {
@@ -52,6 +56,10 @@ public class Movement : MonoBehaviour
         float rotX = camDir.x * camSens;
 
         transform.Rotate(0, rotX, 0);
+
+        Vector3 camRot = cam.transform.eulerAngles;
+        if (camRot.y > 270) camRot.y -= 360;
+        camRot.x = Mathf.Clamp(camRot.x, -70, 70);
         cam.transform.Rotate(-rotY, 0, 0);
     }
     void FixedUpdate()

@@ -12,11 +12,11 @@ public class BossAttackSystem : MonoBehaviour
     void Awake()
     {
         if (!player) player = GameObject.Find("Player");
-        if (!playerSys) playerSys = GetComponent<PlayerSystem>();
+        if (!playerSys) playerSys = player.GetComponent<PlayerSystem>();
     }
     public void TryAttack()
     {
-        if (!canAttack) return;
+        if (!canAttack || player == null) return;
         StartCoroutine(AttackRoutine());
     }
     // initiate selection of a move and perform the one returned from attackRoll()
@@ -46,31 +46,21 @@ public class BossAttackSystem : MonoBehaviour
         prevAtk = num;
         return num;
     }
+    // all endlags and startups were tested and worked successfully
     IEnumerator Attack0()
     {
-        Debug.Log("Attack 0");
-        if (player != null) playerSys.Damaged(33);
-        else yield break;
+        playerSys.Damaged(33);
         yield return new WaitForSeconds(0.5f);
     }
     IEnumerator Attack1()
     {
-        Debug.Log("Windup started");
         yield return new WaitForSeconds(0.5f);
-        Debug.Log("Attack 1");
-        if (player != null) playerSys.Damaged(33);
-        else yield break;
-        Debug.Log("Endlag started");
+        playerSys.Damaged(33);
         yield return new WaitForSeconds(0.2f);
-        Debug.Log("Endlag ended");
     }
     IEnumerator Attack2()
     {
-        Debug.Log("Attack 2");
-        if (player != null) playerSys.Damaged(33);
-        else yield break;
-        Debug.Log("Endlag started");
+        playerSys.Damaged(33);
         yield return new WaitForSeconds(0.5f);
-        Debug.Log("Endlag ended");
     }
 }

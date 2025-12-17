@@ -8,7 +8,7 @@ public class PlayerSystem : MonoBehaviour
     {
         currentHealth = maxHealth;
     }
-    void Damaged(int dmg)
+    public void Damaged(int dmg)
     {
         currentHealth -= dmg;
         Debug.Log("Took " + dmg + " damage");

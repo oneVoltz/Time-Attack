@@ -20,5 +20,6 @@ public class BossDefault : MonoBehaviour
         Vector3 playerDir = (player.transform.position - transform.position) - new Vector3(0, player.transform.position.y - transform.position.y, 0);
         Vector3 newRot = Vector3.RotateTowards(transform.position, playerDir, 10f, 0f);
         transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(newRot), 10f * Time.deltaTime);
+        //Debug.Log(Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(newRot), 10f * Time.deltaTime));
     }
 }

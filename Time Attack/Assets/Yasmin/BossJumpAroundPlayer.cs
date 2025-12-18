@@ -13,9 +13,11 @@ public class BossJumpAroundPlayer : MonoBehaviour
     public LayerMask groundLayer;
     public float groundCheckDistance = 1.2f;
 
+    public int jumpOrAttack;
     Rigidbody rb;
     BossAttackController attackController;
-    bool canJump = true;
+    public bool canJump = true;
+  
 
     void Start()
     {
@@ -29,14 +31,21 @@ public class BossJumpAroundPlayer : MonoBehaviour
     void Update()
     {
         FacePlayer();
+    
 
         if (canJump && IsGrounded())
         {
-            attackController.TryAttack();
-            StartCoroutine(Jump());
+         
+                attackController.TryAttack();
+           
+                StartCoroutine(Jump());
+            
+              
+
+
+
         }
     }
-
     void FacePlayer()
     {
         Vector3 dir = player.position - transform.position;
@@ -51,18 +60,26 @@ public class BossJumpAroundPlayer : MonoBehaviour
 
     IEnumerator Jump()
     {
-        canJump = false;
 
-        float angle = Random.Range(0f, 360f);
-        Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * jumpRadius;
-        Vector3 target = player.position + offset;
-        Vector3 direction = (target - transform.position).normalized;
+       
+        
+            canJump = false;
+           
 
-        rb.linearVelocity = Vector3.zero;
-        rb.AddForce(direction * sideForce + Vector3.up * jumpForce, ForceMode.Impulse);
+            float angle = Random.Range(0f, 360f);
+            Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * jumpRadius;
+            Vector3 target = player.position + offset;
+            Vector3 direction = (target - transform.position).normalized;
 
-        yield return new WaitForSeconds(jumpCooldown);
-        canJump = true;
+            rb.linearVelocity = Vector3.zero;
+            rb.AddForce(direction * sideForce + Vector3.up * jumpForce, ForceMode.Impulse);
+
+            yield return new WaitForSeconds(jumpCooldown);
+
+          
+            canJump = true;
+
+        
     }
 
     bool IsGrounded()

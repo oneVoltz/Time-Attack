@@ -37,8 +37,10 @@ public class BossAttackController : MonoBehaviour
     public float chargeTime = 1.2f;
     public int chargeDamage = 30;
 
-    bool canAttack = true;
-    int lastAttack = -1;
+    BossJumpAroundPlayer jumpAroundPlayer;
+    public bool canAttack = true;
+    int attackValue;
+    int actionHappening;
 
     void Start()
     {
@@ -52,46 +54,61 @@ public class BossAttackController : MonoBehaviour
     public void TryAttack()
     {
         if (!canAttack) return;
+      
         StartCoroutine(AttackRoutine());
     }
 
     IEnumerator AttackRoutine()
     {
         canAttack = false;
+       
         int attack = GetRandomAttack();
-
         switch (attack)
         {
-            case 1: yield return Fireballs(); break;
-            case 2: yield return Dash(); break;
+            case 0:
+                jumpAroundPlayer.canJump = false;
+                yield return Dash();
+                jumpAroundPlayer.canJump = true;
+                break;
+            case 1:
+
+                yield return Fireballs();
+                break;
+            //case 2: yield return Chill(); break;
             //case 3: yield return FireballSpread(); break;
             //case 4: yield return Shockwave(); break;
             
         }
 
         yield return new WaitForSeconds(attackCooldown);
-        canAttack = true;
+        
     }
 
     int GetRandomAttack()
     {
-        int a;
-        do { a = Random.Range(1, 2); }
-        while (a == lastAttack);
-        lastAttack = a;
-        return a;
+        int attack = Random.Range(0, 2);
+        return attack;
+        
     }
-    IEnumerator Fireballs()
+    public IEnumerator Fireballs()
     {
+     
         for (int i = 0; i < 3; i++)
         {
             Vector3 dir = (player.position - firePoint.position).normalized;
             SpawnFireball(dir);
             yield return new WaitForSeconds(0.25f);
         }
+      
+
     }
-    IEnumerator Dash()
+    public IEnumerator Dash()
     {
+      
+        //dash cooldown
+        transform.localScale = new Vector3(1,0.5f,1);
+        yield return new WaitForSeconds(1f);
+        transform.localScale = new Vector3(1, 1, 1);
         Vector3 dir = (player.position - transform.position).normalized;
         float t = 0;
 
@@ -103,8 +120,9 @@ public class BossAttackController : MonoBehaviour
         }
 
         rb.linearVelocity = Vector3.zero;
-    } 
-
+       
+    }
+  
     /*IEnumerator FireballSpread()
     {
         float startAngle = -spreadAngle * 0.5f;
@@ -122,17 +140,17 @@ public class BossAttackController : MonoBehaviour
 
 
 
-   /* IEnumerator Shockwave()
-    {
-        yield return new WaitForSeconds(shockwaveDelay);
+    /* IEnumerator Shockwave()
+     {
+         yield return new WaitForSeconds(shockwaveDelay);
 
-        foreach (Collider hit in Physics.OverlapSphere(transform.position, shockwaveRadius))
-        {
-            if (hit.CompareTag("Player"))
-                hit.GetComponent<PlayerHealth>()?.TakeDamage(shockwaveDamage);
-        }
-    }
-   */
+         foreach (Collider hit in Physics.OverlapSphere(transform.position, shockwaveRadius))
+         {
+             if (hit.CompareTag("Player"))
+                 hit.GetComponent<PlayerHealth>()?.TakeDamage(shockwaveDamage);
+         }
+     }
+    */
     void SpawnFireball(Vector3 dir)
     {
         GameObject fb = Instantiate(

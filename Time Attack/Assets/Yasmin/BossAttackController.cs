@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Animations;
 
 public class BossAttackController : MonoBehaviour
 {
@@ -61,12 +62,11 @@ public class BossAttackController : MonoBehaviour
 
         switch (attack)
         {
-            case 0: yield return Slam(); break;
             case 1: yield return Fireballs(); break;
             case 2: yield return Dash(); break;
-            case 3: yield return FireballSpread(); break;
-            case 4: yield return Shockwave(); break;
-            case 5: yield return SpinCharge(); break;
+            //case 3: yield return FireballSpread(); break;
+            //case 4: yield return Shockwave(); break;
+            
         }
 
         yield return new WaitForSeconds(attackCooldown);
@@ -76,25 +76,11 @@ public class BossAttackController : MonoBehaviour
     int GetRandomAttack()
     {
         int a;
-        do { a = Random.Range(0, 6); }
+        do { a = Random.Range(1, 2); }
         while (a == lastAttack);
         lastAttack = a;
         return a;
     }
-
-    
-
-    IEnumerator Slam()
-    {
-        yield return new WaitForSeconds(0.3f);
-
-        foreach (Collider hit in Physics.OverlapSphere(transform.position, slamRadius))
-        {
-            if (hit.CompareTag("Player"))
-                hit.GetComponent<PlayerHealth>()?.TakeDamage(slamDamage);
-        }
-    }
-
     IEnumerator Fireballs()
     {
         for (int i = 0; i < 3; i++)
@@ -104,22 +90,6 @@ public class BossAttackController : MonoBehaviour
             yield return new WaitForSeconds(0.25f);
         }
     }
-
-    IEnumerator FireballSpread()
-    {
-        float startAngle = -spreadAngle * 0.5f;
-        float step = spreadAngle / (spreadCount - 1);
-
-        for (int i = 0; i < spreadCount; i++)
-        {
-            float angle = startAngle + step * i;
-            Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
-            SpawnFireball(dir);
-        }
-
-        yield return new WaitForSeconds(0.4f);
-    }
-
     IEnumerator Dash()
     {
         Vector3 dir = (player.position - transform.position).normalized;
@@ -133,9 +103,26 @@ public class BossAttackController : MonoBehaviour
         }
 
         rb.linearVelocity = Vector3.zero;
-    }
+    } 
 
-    IEnumerator Shockwave()
+    /*IEnumerator FireballSpread()
+    {
+        float startAngle = -spreadAngle * 0.5f;
+        float step = spreadAngle / (spreadCount - 1);
+
+        for (int i = 0; i < spreadCount; i++)
+        {
+            float angle = startAngle + step * i;
+            Vector3 dir = Quaternion.Euler(0, angle, 0) * transform.forward;
+           SpawnFireball(dir);
+        }
+
+        yield return new WaitForSeconds(0.4f);
+    }*/
+
+
+
+   /* IEnumerator Shockwave()
     {
         yield return new WaitForSeconds(shockwaveDelay);
 
@@ -145,24 +132,7 @@ public class BossAttackController : MonoBehaviour
                 hit.GetComponent<PlayerHealth>()?.TakeDamage(shockwaveDamage);
         }
     }
-
-    IEnumerator SpinCharge()
-    {
-        float t = 0;
-        Vector3 dir = transform.forward;
-
-        while (t < chargeTime)
-        {
-            transform.Rotate(Vector3.up, spinSpeed * Time.deltaTime);
-            rb.linearVelocity = dir * chargeSpeed;
-            t += Time.deltaTime;
-            yield return null;
-        }
-
-        rb.linearVelocity = Vector3.zero;
-    }
-
-
+   */
     void SpawnFireball(Vector3 dir)
     {
         GameObject fb = Instantiate(

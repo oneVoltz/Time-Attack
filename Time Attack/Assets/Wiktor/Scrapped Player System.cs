@@ -1,6 +1,6 @@
 using JetBrains.Annotations;
 using UnityEngine;
-
+/*
 public class Movement : MonoBehaviour
 {
     CharacterController charControl;
@@ -78,4 +78,4 @@ public class Movement : MonoBehaviour
         Vector3 lastMove = (move * speed) + (playerVelocity.y * Vector3.up);
         charControl.Move(lastMove * Time.fixedDeltaTime);
     }
-}
+}*/

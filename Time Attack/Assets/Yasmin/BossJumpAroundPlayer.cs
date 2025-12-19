@@ -9,10 +9,10 @@ public class BossJumpAroundPlayer : MonoBehaviour
     public float jumpForce = 12f;
     public float sideForce = 8f;
     public float jumpRadius = 6f;
-    public float jumpCooldown = 2f;
+    private float jumpCooldown = 3f;
 
     public LayerMask groundLayer;
-    public float groundCheckDistance = 1.2f;
+    private float groundCheckDistance = 0.1f;
 
     public int jumpOrAttack;
     Rigidbody rb;
@@ -32,8 +32,7 @@ public class BossJumpAroundPlayer : MonoBehaviour
     void Update()
     {
         FacePlayer();
-     
-        if (canJump && IsGrounded())
+        if (canJump && IsGrounded() == true)
         {
          
                 attackController.TryAttack();
@@ -62,7 +61,6 @@ public class BossJumpAroundPlayer : MonoBehaviour
     {
             canJump = false;
 
-        
             float angle = Random.Range(0f, 360f);
             Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * jumpRadius;
             Vector3 target = player.position + offset;
@@ -70,11 +68,9 @@ public class BossJumpAroundPlayer : MonoBehaviour
 
             rb.linearVelocity = Vector3.zero;
             rb.AddForce(direction * sideForce + Vector3.up * jumpForce, ForceMode.Impulse);
-
-      
             yield return new WaitForSeconds(jumpCooldown);
             canJump = true;
-       
+
 
 
 
@@ -84,6 +80,7 @@ public class BossJumpAroundPlayer : MonoBehaviour
 
     bool IsGrounded()
     {
-        return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
+        Vector3 footPos = transform.position + Vector3.down * 0.95f;
+        return Physics.Raycast(footPos, Vector3.down, groundCheckDistance, groundLayer);
     }
 }

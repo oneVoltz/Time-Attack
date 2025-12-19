@@ -34,7 +34,7 @@ public class PlayerMoveNew : MonoBehaviour
     public Animator shootAnimation;
 
 
-    public bool isPaused;
+    
     void Awake()
     {
         rb = GetComponent<Rigidbody>();
@@ -123,17 +123,5 @@ public class PlayerMoveNew : MonoBehaviour
         return Physics.Raycast(transform.position, Vector3.down, groundCheckDistance, groundLayer);
     }
 
-    public void PauseGame()
-    {
-        Time.timeScale = 0f;
-        isPaused = true;
-        Debug.Log("Game Paused");
-    }
-
-    public void ResumeGame()
-    {
-        Time.timeScale = 1f;
-        isPaused = false;
-        Debug.Log("Game Resumed");
-    }
+   
 }

@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections;
+using UnityEditor.Experimental.GraphView;
 
 [RequireComponent(typeof(Rigidbody))]
 public class BossJumpAroundPlayer : MonoBehaviour
@@ -31,8 +32,7 @@ public class BossJumpAroundPlayer : MonoBehaviour
     void Update()
     {
         FacePlayer();
-    
-
+     
         if (canJump && IsGrounded())
         {
          
@@ -60,12 +60,9 @@ public class BossJumpAroundPlayer : MonoBehaviour
 
     IEnumerator Jump()
     {
-
-       
-        
             canJump = false;
-           
 
+        
             float angle = Random.Range(0f, 360f);
             Vector3 offset = new Vector3(Mathf.Cos(angle), 0, Mathf.Sin(angle)) * jumpRadius;
             Vector3 target = player.position + offset;
@@ -74,12 +71,15 @@ public class BossJumpAroundPlayer : MonoBehaviour
             rb.linearVelocity = Vector3.zero;
             rb.AddForce(direction * sideForce + Vector3.up * jumpForce, ForceMode.Impulse);
 
+      
             yield return new WaitForSeconds(jumpCooldown);
-
-          
             canJump = true;
-            
-        
+       
+
+
+
+
+
     }
 
     bool IsGrounded()

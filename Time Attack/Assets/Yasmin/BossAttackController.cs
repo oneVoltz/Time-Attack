@@ -66,10 +66,13 @@ public class BossAttackController : MonoBehaviour
         switch (attack)
         {
             case 0:
-                jumpAroundPlayer.canJump = false;
-                yield return Dash();
-                jumpAroundPlayer.canJump = true;
+               
+                 yield return Dash();
+                
+
                 break;
+
+
             case 1:
 
                 yield return Fireballs();
@@ -118,7 +121,6 @@ public class BossAttackController : MonoBehaviour
             t += Time.deltaTime;
             yield return null;
         }
-
         rb.linearVelocity = Vector3.zero;
        
     }

@@ -78,7 +78,7 @@ public class BossJumpAroundPlayer : MonoBehaviour
 
           
             canJump = true;
-
+            
         
     }
 

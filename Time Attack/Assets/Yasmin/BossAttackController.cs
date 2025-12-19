@@ -81,7 +81,7 @@ public class BossAttackController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(attackCooldown);
-        
+        canAttack = true;
     }
 
     int GetRandomAttack()

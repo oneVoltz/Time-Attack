@@ -8,6 +8,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] GameObject settingsPanel;
     public void StartButton()
     {
+        Time.timeScale = 1f;
         SceneManager.LoadScene(1);
     }
 

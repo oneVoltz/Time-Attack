@@ -18,13 +18,16 @@ public class BossJumpAroundPlayer : MonoBehaviour
     Rigidbody rb;
     BossAttackController attackController;
     public bool canJump = true;
+    public BossHealth bossHealth;
+
   
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         attackController = GetComponent<BossAttackController>();
-
+        jumpCooldown = 3f;
+        attackController.attackCooldown = 1.5f;
         if (!player)
             player = GameObject.FindGameObjectWithTag("Player").transform;
     }
@@ -43,6 +46,11 @@ public class BossJumpAroundPlayer : MonoBehaviour
 
 
 
+        }
+        if (bossHealth.currentHealth<150)
+        {
+            jumpCooldown = 1.5f;
+            attackController.attackCooldown = 0.5f;
         }
     }
     void FacePlayer()

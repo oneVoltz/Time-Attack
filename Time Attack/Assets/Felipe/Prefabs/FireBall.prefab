@@ -278,6 +278,7 @@ GameObject:
   - component: {fileID: 808631641742871583}
   - component: {fileID: 44435546385795984}
   - component: {fileID: 4078823136609747672}
+  - component: {fileID: 2871810371824281217}
   m_Layer: 0
   m_Name: FireBall
   m_TagString: Untagged
@@ -345,6 +346,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Fireball
   damage: 15
   lifeTime: 5
+--- !u!135 &2871810371824281217
+SphereCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7875012056683229064}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Radius: 0.26753354
+  m_Center: {x: 0.011810541, y: 0, z: -0.013681412}
 --- !u!1 &8222739521974413246
 GameObject:
   m_ObjectHideFlags: 0

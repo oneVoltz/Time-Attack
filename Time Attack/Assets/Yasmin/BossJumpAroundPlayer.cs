@@ -1,6 +1,6 @@
 using UnityEngine;
 using System.Collections;
-using UnityEditor.Experimental.GraphView;
+
 
 [RequireComponent(typeof(Rigidbody))]
 public class BossJumpAroundPlayer : MonoBehaviour
